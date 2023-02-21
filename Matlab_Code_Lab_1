@@ -1,0 +1,6 @@
+% Directly import the data into matlab using the import data option and store it as a table to variable X.
+X = X {:,:} % Converts the table into a numeric matrix
+plot(X(1:1024,1),X(1:1024,2));
+xlim([0 3500]);
+xlabel('Frequency in Hz')
+
