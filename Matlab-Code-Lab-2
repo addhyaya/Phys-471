@@ -28,7 +28,7 @@ hold on
 
 plot(Y(1:n,1),Y(1:n,2)); % This plots the signal from the piezo crystal
 hold on
-fitted = fit(Y(index(2):index2,1),Y(index(2):index2,2),'exp2'); % This fits the data with a 2 term exponential
+fitted = fit(Y(index(2):index2,1),Y(index(2):index2,2),'exp2'); % This fits the data with a 2 term exponential. If this shows an error, your version of matlab doesn't have curvefitting toolbox.
 plot(fitted,Y(index(2):index2,1),Y(index(2):index2,2)); % Plots the fitted data
 hold on
 coeffvals = coeffvalues(fitted);  % Extracting the fitted coefficients
