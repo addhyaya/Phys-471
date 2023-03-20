@@ -1,0 +1,54 @@
+%% Importing data
+% Directly import the text file as a table into MATLAB using the import data option
+% in MATLAB and save them as X and Y.
+% To skip this step when you're reviewing, I have saved a workspace of the imported data (link available in the report) which is easier for you to access. You can double click on the workspace and run this file.
+ X = stepfunct{:,:}; % This converts the table into a numeric matrix.
+ Y = otherfunct{:,:};
+
+[n,g]=size(X);
+X(1:n,1)=X(1:n).*10^6; % Converting to convenient unit
+Y(1:n,1)=Y(1:n).*10^6;
+
+%% Locating step function
+
+plot(X(1:n,1),X(1:n,2)); % Plotting the data
+grid on
+hold on
+difference = diff(X,1,1); % Calculates difference between matrix elements
+[maximum,index]= max(difference);
+plot(X(index(2)-1,1),X(index(2)-1,2),'r*'); % Plots the location of the step-increase
+hold on
+
+%% Locating the rise from the rod signal
+
+line = maximum(2)/3;
+index2 = dsearchn(Y(1:n,2),line); % Picks the closest user defined value to a curve
+plot(Y(index2,1),Y(index2,2),'g*'); % This is used to determine the upper bound for the values I will be using to fit the curve
+hold on 
+
+plot(Y(1:n,1),Y(1:n,2)); % This plots the signal from the piezo crystal
+hold on
+fitted = fit(Y(index(2):index2,1),Y(index(2):index2,2),'exp2'); % This fits the data with a 2 term exponential
+plot(fitted,Y(index(2):index2,1),Y(index(2):index2,2)); % Plots the fitted data
+hold on
+coeffvals = coeffvalues(fitted);  % Extracting the fitted coefficients
+a = coeffvals(1,1);
+b = coeffvals(1,2);
+c = coeffvals(1,3);
+d = coeffvals(1,4);
+fittedfunct = a*exp(b.*Y(index(2):index2,1))+c*exp(d.*Y(index(2):index2,1));
+index3 = abs(index(2)-index2); % This is just to determine the matrix size of the variable fittedfunct
+
+%% 1D interpolation of derivative values
+
+h = Y(2)-Y(1); % Step Interval
+dfdx = gradient(fittedfunct,h); % Derivative
+xpoint = interp1(dfdx,Y(index(2):index2,1),0.003); % Finds the point with slope 0.003
+xvect = xpoint*ones(index3+1,1); 
+plot(xvect,fittedfunct,'k-'); % Plots the value found in line 45
+xlabel('Time(in us)')
+ylabel('Volts')
+title('Obtained signals')
+hold on;
+% % Calculating time difference
+deltat = xpoint - X(index(2)-1,1); % Calculates the time difference
