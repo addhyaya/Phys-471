@@ -1,4 +1,4 @@
-% Import data as a numeric matrix by using the import data tool in MATLAB. I have put the workspace in my reference section too if you just want to open it and run.
+% Import data as a numeric matrix by using the import data tool in MATLAB. I have put the workspace in my reference section too, so you can load it and run.
 wavelength = Opticalspectra(1:1101,1);
 for i = 2 : 12
     plot(wavelength,Opticalspectra(1:1101,i)+1.3*i); % 1.3*i is put there so that everything is shifted up every loop. This is done only for representation.
